@@ -48,10 +48,10 @@
 {
 	NSArray *sheetInfo = (NSArray *)CFBridgingRelease(contextInfo);
 
-	NSString *suppressionKey = sheetInfo[0];
-	NSString *selectorName   = sheetInfo[2];
+	NSString *suppressionKey = [sheetInfo objectAtIndex:0];
+	NSString *selectorName   = [sheetInfo objectAtIndex:2];
 
-	id  targetClass  = sheetInfo[1];
+	id  targetClass  = [sheetInfo objectAtIndex:1];
 	SEL targetAction = NSSelectorFromString(selectorName);
 
 	if (NSObjectIsNotEmpty(suppressionKey)) {

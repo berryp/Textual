@@ -58,8 +58,8 @@
 	];
 #else
 	NSArray *scriptPaths = @[
-	NSStringNilValueSubstitute([TPCPreferences whereScriptsLocalPath]),
-	NSStringNilValueSubstitute([TPCPreferences whereScriptsPath])
+	NSStringNilValueSubstitute([TPCPreferences customScriptFolderPath]),
+	NSStringNilValueSubstitute([TPCPreferences bundledScriptFolderPath])
 	];
 #endif
 	

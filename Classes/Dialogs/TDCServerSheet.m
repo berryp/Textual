@@ -97,7 +97,7 @@
 - (NSString *)hostFoundInServerList:(NSString *)hosto
 {
 	for (NSString *key in self.serverList) {
-		NSString *host = (self.serverList)[key];
+		NSString *host = [(self.serverList) objectForKey:key];
 		
 		if ([hosto isEqualNoCase:host]) {
 			return key;
@@ -274,7 +274,7 @@
 		if (NSObjectIsEmpty(realHost)) {
 			self.config.host = hostname;
 		} else {
-			self.config.host = (self.serverList)[realHost];
+			self.config.host = [(self.serverList) objectForKey:realHost];
 		}
 	}
 	
@@ -530,7 +530,7 @@
 	if (n < 0) {
 		[self.config.channels safeAddObject:conf];
 	} else {
-		(self.config.channels)[n] = conf;
+		[(self.config.channels) replaceObjectAtIndex:n withObject:conf];
 	}
 	
 	[self reloadChannelTable];

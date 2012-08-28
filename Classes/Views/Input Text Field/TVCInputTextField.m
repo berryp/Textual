@@ -68,8 +68,8 @@
         
         NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
 		
-        attrs[NSFontAttributeName] = TXDefaultTextFieldFont;
-        attrs[NSForegroundColorAttributeName] = [NSColor grayColor];
+        [attrs setObject:TXDefaultTextFieldFont forKey:NSFontAttributeName];
+        [attrs setObject:[NSColor grayColor] forKey:NSForegroundColorAttributeName];
         
         self.placeholderString = [NSAttributedString alloc];
         self.placeholderString = [self.placeholderString initWithString:TXTLS(@"InputTextFieldPlaceholderValue") attributes:attrs];
@@ -118,12 +118,12 @@
 
 - (NSView *)splitterView
 {
-    return (self.superview.superview.superview.subviews)[0];
+    return [(self.superview.superview.superview.subviews) objectAtIndex:0];
 }
 
 - (TVCInputTextFieldBackground *)backgroundView
 {
-	return (self.superview.superview.superview.subviews)[2];
+	return [(self.superview.superview.superview.subviews) objectAtIndex:2];
 }
 
 - (void)updateTextDirection

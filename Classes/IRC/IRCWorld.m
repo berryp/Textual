@@ -128,7 +128,7 @@
 		[ary safeAddObject:[u dictionaryValue]];
 	}
 	
-	dic[@"clients"] = ary;
+	[dic setObject:ary forKey:@"clients"];
 	
 	return dic;
 }

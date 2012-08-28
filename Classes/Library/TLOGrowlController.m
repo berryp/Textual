@@ -214,13 +214,13 @@
 	[NSApp activateIgnoringOtherApps:YES];
 
 	if ([context isKindOfClass:[NSDictionary class]]) {
-		NSNumber *uid = context[@"client"];
+		NSNumber *uid = [context objectForKey:@"client"];
 		
 		IRCClient  *u = [self.owner findClientById:[uid integerValue]];
 		IRCChannel *c = nil;
 		
-		if (context[@"channel"]) {
-			NSNumber *cid = context[@"channel"];
+		if ([context objectForKey:@"channel"]) {
+			NSNumber *cid = [context objectForKey:@"channel"];
 			
 			c = [self.owner findChannelByClientId:[uid integerValue] channelId:[cid integerValue]];
 		}

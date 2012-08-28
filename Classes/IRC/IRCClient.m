@@ -216,7 +216,7 @@ static NSDateFormatter *dateTimeFormatter = nil;
 		}
 	}
 
-	dic[@"channelList"] = ary;
+	[dic setObject:ary forKey:@"channelList"];
 
 	return dic;
 }
@@ -277,7 +277,7 @@ static NSDateFormatter *dateTimeFormatter = nil;
 		NSMutableDictionary *newEntries = [NSMutableDictionary dictionary];
 
 		for (NSString *lname in self.trackedUsers) {
-			oldEntries[lname] = (self.trackedUsers)[lname];
+			[oldEntries setObject:[(self.trackedUsers) objectForKey:lname] forKey:lname];
 		}
 
 		for (IRCAddressBook *g in ignores) {
@@ -286,7 +286,7 @@ static NSDateFormatter *dateTimeFormatter = nil;
 
 				if ([lname isNickname]) {
 					if ([oldEntries containsKeyIgnoringCase:lname]) {
-						newEntries[lname] = oldEntries[lname];
+						[newEntries setObject:[oldEntries objectForKey:lname] forKey:lname];
 					} else {
 						[newEntries setBool:NO forKey:lname];
 					}
@@ -1185,7 +1185,7 @@ static NSDateFormatter *dateTimeFormatter = nil;
 		/* Event Descriptor */
 		/* /////////////////////////////////////////////////////// */
 
-		NSAppleEventDescriptor *firstParameter	= [NSAppleEventDescriptor descriptorWithString:details[@"input"]];
+		NSAppleEventDescriptor *firstParameter	= [NSAppleEventDescriptor descriptorWithString:[details objectForKey:@"input"]];
 		NSAppleEventDescriptor *parameters		= [NSAppleEventDescriptor listDescriptor];
 
 		[parameters insertDescriptor:firstParameter atIndex:1];
@@ -2450,11 +2450,11 @@ static NSDateFormatter *dateTimeFormatter = nil;
 		{
 			NSString *ref  = [TPCPreferences gitBuildReference];
 			NSString *name = [TPCPreferences applicationName];
-			NSString *vers = [TPCPreferences textualInfoPlist][@"CFBundleVersion"];
+			NSString *vers = [[TPCPreferences textualInfoPlist] objectForKey:@"CFBundleVersion"];
 
 			NSString *text = [NSString stringWithFormat:TXTLS(@"IRCCTCPVersionInfo"), name, vers,
 							  ((NSObjectIsEmpty(ref)) ? TXTLS(@"Unknown") : ref),
-							  [TPCPreferences textualInfoPlist][@"TXBundleBuildCodeName"]];
+							  [[TPCPreferences textualInfoPlist] objectForKey:@"TXBundleBuildCodeName"]];
 
 			if (c.isChannel == NO && c.isTalk == NO) {
 				[self printDebugInformationToConsole:text];
@@ -2685,8 +2685,8 @@ static NSDateFormatter *dateTimeFormatter = nil;
 			];
 #else
 			NSArray *scriptPaths = @[
-			NSStringNilValueSubstitute([TPCPreferences whereScriptsPath]),
-			NSStringNilValueSubstitute([TPCPreferences whereScriptsLocalPath])
+			NSStringNilValueSubstitute([TPCPreferences bundledScriptFolderPath]),
+			NSStringNilValueSubstitute([TPCPreferences customScriptFolderPath])
 			];
 #endif
 
@@ -3881,11 +3881,11 @@ static NSDateFormatter *dateTimeFormatter = nil;
 			} else {
 				NSString *ref  = [TPCPreferences gitBuildReference];
 				NSString *name = [TPCPreferences applicationName];
-				NSString *vers = [TPCPreferences textualInfoPlist][@"CFBundleVersion"];
+				NSString *vers = [[TPCPreferences textualInfoPlist] objectForKey:@"CFBundleVersion"];
 
 				NSString *text = [NSString stringWithFormat:TXTLS(@"IRCCTCPVersionInfo"), name, vers,
 								  ((NSObjectIsEmpty(ref)) ? TXTLS(@"Unknown") : ref),
-								  [TPCPreferences textualInfoPlist][@"TXBundleBuildCodeName"]];
+								  [[TPCPreferences textualInfoPlist] objectForKey:@"TXBundleBuildCodeName"]];
 
 				[self sendCTCPReply:nick command:command text:text];
 			}

@@ -733,11 +733,11 @@
 		NSMutableDictionary *outputDictionary = [NSMutableDictionary dictionary];
 
 		if (NSObjectIsNotEmpty(line.keywords)) {
-			inputDictionary[@"keywords"] = line.keywords;
+			[inputDictionary setObject:line.keywords forKey:@"keywords"];
 		}
 
 		if (NSObjectIsNotEmpty(line.excludeWords)) {
-			inputDictionary[@"excludeWords"] = line.excludeWords;
+			[inputDictionary setObject:line.excludeWords forKey:@"excludeWords"];
 		}
 
 		[inputDictionary setBool:drawLinks forKey:@"renderLinks"];
@@ -789,13 +789,13 @@
 
 	// ---- //
 
-	attributes[@"inlineMediaAvailable"] = @(NSObjectIsNotEmpty(inlineImageLinks));
-	attributes[@"inlineMediaArray"]		= [NSMutableArray array];
+	[attributes setObject:@(NSObjectIsNotEmpty(inlineImageLinks)) forKey:@"inlineMediaAvailable"];
+	[attributes setObject:[NSMutableArray array] forKey:@"inlineMediaArray"];
 
 	for (NSString *imageUrl in inlineImageLinks) {
 		NSString *url = [inlineImageLinks objectForKey:imageUrl];
 
-		[(id)attributes[@"inlineMediaArray"] addObject:@{
+		[(id)[attributes objectForKey:@"inlineMediaArray"] addObject:@{
 			@"imageURL"					: imageUrl,
 			@"anchorLink"				: url,
 			@"preferredMaximumWidth"	: @([TPCPreferences inlineImagesMaxWidth]),
@@ -804,42 +804,42 @@
 
 	// ---- //
 
-	attributes[@"isNicknameAvailable"] = @(NO);
+	[attributes setObject:@(NO) forKey:@"isNicknameAvailable"];
 
 	// ---- //
 
 	if (NSObjectIsNotEmpty(line.receivedAt)) {
 		NSString *time = [line formattedTimestamp];
 		
-		attributes[@"formattedTimestamp"] = time;
+		[attributes setObject:time forKey:@"formattedTimestamp"];
 	}
 
 	// ---- //
 
 	if (NSObjectIsNotEmpty(line.nick)) {
-		attributes[@"isNicknameAvailable"] = @(YES);
+		[attributes setObject:@(YES) forKey:@"isNicknameAvailable"];
 
-		attributes[@"nicknameColorNumber"]			= @(line.nickColorNumber);
-		attributes[@"nicknameColorHashingEnabled"]	= @([TPCPreferences disableNicknameColors] == NO);
+		[attributes setObject:@(line.nickColorNumber) forKey:@"nicknameColorNumber"];
+		[attributes setObject:@([TPCPreferences disableNicknameColors] == NO) forKey:@"nicknameColorHashingEnabled"];
 
-		attributes[@"formattedNickname"]	= [line formattedNickname:self.channel].trim;
+		[attributes setObject:[line formattedNickname:self.channel].trim forKey:@"formattedNickname"];
 
-		attributes[@"nickname"]				= line.nick;
-		attributes[@"nicknameType"]			= [TVCLogLine memberTypeString:line.memberType];
+		[attributes setObject:line.nick forKey:@"nickname"];
+		[attributes setObject:[TVCLogLine memberTypeString:line.memberType] forKey:@"nicknameType"];
 	}
 
 	// ---- //
 
-	attributes[@"lineType"] = [TVCLogLine lineTypeString:line.lineType];
+	[attributes setObject:[TVCLogLine lineTypeString:line.lineType] forKey:@"lineType"];
 
-	attributes[@"lineClassAttributeRepresentation"] = ((isText)			? @"text" : @"event");
-	attributes[@"highlightAttributeRepresentation"] = ((highlighted)	? @"true" : @"false");
+	[attributes setObject:((isText)	? @"text" : @"event") forKey:@"lineClassAttributeRepresentation"];
+	[attributes setObject:((highlighted) ? @"true" : @"false") forKey:@"highlightAttributeRepresentation"];
 
-	attributes[@"message"]				= line.body;
-	attributes[@"formattedMessage"]		= body;
+	[attributes setObject:line.body forKey:@"message"];
+	[attributes setObject:body forKey:@"formattedMessage"];
 
-	attributes[@"isRemoteMessage"]	= @(line.memberType == TVCLogMemberNormalType);
-	attributes[@"isHighlight"]		= @(highlighted);
+	[attributes setObject:@(line.memberType == TVCLogMemberNormalType) forKey:@"isRemoteMessage"];
+	[attributes setObject:@(highlighted) forKey:@"isHighlight"];
 
 	// ---- //
 
@@ -890,7 +890,7 @@
 
 		// ---- //
 
-		attributes[@"lineNumber"] = @(self.lineNumber);
+		[attributes setObject:@(self.lineNumber) forKey:@"lineNumber"];
 
 		// ---- //
 
@@ -908,7 +908,7 @@
 				[self setNeedsLimitNumberOfLines];
 			}
 
-			if ([attributes[@"highlightAttributeRepresentation"] isEqualToString:@"true"]) {
+			if ([[attributes objectForKey:@"highlightAttributeRepresentation"] isEqualToString:@"true"]) {
 				[self.highlightedLineNumbers safeAddObject:@(self.lineNumber)];
 			}
 
@@ -986,34 +986,34 @@
 
 	// ---- //
 
-	templateTokens[@"cacheToken"]				= [NSString stringWithUUID];
+	[templateTokens setObject:[NSString stringWithUUID] forKey:@"cacheToken"];
 
-	templateTokens[@"activeStyleAbsolutePath"]	= self.theme.other.path;
-	templateTokens[@"applicationResourcePath"]	= [TPCPreferences applicationResourcesFolderPath];
+	[templateTokens setObject:self.theme.other.path forKey:@"activeStyleAbsolutePath"];
+	[templateTokens setObject:[TPCPreferences applicationResourcesFolderPath] forKey:@"applicationResourcePath"];
 
 	// ---- //
 	
 	if (self.channel) {
-		templateTokens[@"isChannelView"]	= @(YES);
+		[templateTokens setObject:@(YES) forKey:@"isChannelView"];
 		
-		templateTokens[@"channelName"]		= logEscape(self.channel.name);
-		templateTokens[@"viewTypeToken"]	= [self.channel channelTypeString];
+		[templateTokens setObject:logEscape(self.channel.name) forKey:@"channelName"];
+		[templateTokens setObject:[self.channel channelTypeString] forKey:@"viewTypeToken"];
 
 		if (NSObjectIsNotEmpty(topic)) {
-			templateTokens[@"formattedTopicValue"] = topic;
+			[templateTokens setObject:topic forKey:@"formattedTopicValue"];
 		} else {
-			templateTokens[@"formattedTopicValue"] = TXTLS(@"IRCChannelEmptyTopic");
+			[templateTokens setObject:TXTLS(@"IRCChannelEmptyTopic") forKey:@"formattedTopicValue"];
 		}
 	} else {
-		templateTokens[@"viewTypeToken"] = @"server";
+		[templateTokens setObject:@"server" forKey:@"viewTypeToken"];
 	}
 
 	// ---- //
 
 	if ([TPCPreferences rightToLeftFormatting]) {
-		 templateTokens[@"textDirectionToken"] = @"rtl";
+		 [templateTokens setObject:@"rtl" forKey:@"textDirectionToken"];
 	} else {
-		 templateTokens[@"textDirectionToken"] = @"ltr";
+		 [templateTokens setObject:@"ltr" forKey:@"textDirectionToken"];
 	}
 
 	// ---- //
@@ -1038,13 +1038,13 @@
 	NSString *name = [channelFont fontName];
 	CGFloat  rsize = [channelFont pointSize];
 
-	templateTokens[@"userConfiguredFontName"] = name;
-	templateTokens[@"userConfiguredFontSize"] = @(rsize * (72.0 / 96.0));
+	[templateTokens setObject:name forKey:@"userConfiguredFontName"];
+	[templateTokens setObject:@(rsize * (72.0 / 96.0)) forKey:@"userConfiguredFontSize"];
 
 	// ---- //
 
 	if ([TPCPreferences useLogAntialiasing] == NO) {
-		templateTokens[@"windowAntialiasingDisabled"] = @(YES);
+		[templateTokens setObject:@(YES) forKey:@"windowAntialiasingDisabled"];
 	}
 
 	// ---- //
@@ -1052,9 +1052,9 @@
 	NSInteger indentOffset = other.indentationOffset;
 	
 	if (indentOffset == TXThemeDisabledIndentationOffset || [TPCPreferences rightToLeftFormatting]) {
-		templateTokens[@"nicknameIndentationAvailable"] = @(NO);
+		[templateTokens setObject:@(NO) forKey:@"nicknameIndentationAvailable"];
 	} else {
-		templateTokens[@"nicknameIndentationAvailable"] = @(YES);
+		[templateTokens setObject:@(YES) forKey:@"nicknameIndentationAvailable"];
 		
 		NSString *time = TXFormattedTimestampWithOverride([NSDate date], [TPCPreferences themeTimestampFormat], other.timestampFormat);
 		
@@ -1063,7 +1063,7 @@
 		NSSize    textSize  = [time sizeWithAttributes:attributes]; 
 		NSInteger textWidth = (textSize.width + indentOffset);
 
-		templateTokens[@"predefinedTimestampWidth"] = @(textWidth);
+		[templateTokens setObject:@(textWidth) forKey:@"predefinedTimestampWidth"];
 	}
 
 	// ---- //
@@ -1094,7 +1094,7 @@
 	[scrollView setHasVerticalScroller:YES];
 	
 	if ([scrollView respondsToSelector:@selector(setAllowsHorizontalScrolling:)]) {
-		[scrollView performSelector:@selector(setAllowsHorizontalScrolling:) withObject:NO];
+		[scrollView performSelector:@selector(setAllowsHorizontalScrolling:) withObject:@(NO)];
 	}
 }
 

@@ -75,7 +75,7 @@
 		[clientAry safeAddObject:[e dictionaryValue]];
 	}
 	
-	dic[@"clients"] = clientAry;
+	[dic setObject:clientAry forKey:@"clients"];
 	
 	return dic;
 }

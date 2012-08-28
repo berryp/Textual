@@ -189,7 +189,7 @@
 		case WebNavigationTypeLinkClicked:
 			[listener ignore];
 			
-			[TLOpenLink open:actionInformation[WebActionOriginalURLKey]];
+			[TLOpenLink open:[actionInformation objectForKey:WebActionOriginalURLKey]];
 			
 			break;
 		case WebNavigationTypeOther:

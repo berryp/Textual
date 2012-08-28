@@ -90,9 +90,9 @@
 	
 	[dic setBool:self.autoConnectCheck.state forKey:@"connectOnLaunch"];
 	
-	dic[@"channelList"] = chans;
-	dic[@"identityNickname"] = self.nickText.stringValue;
-	dic[@"serverAddress"] = [self.hostCombo.stringValue cleanedServerHostmask];
+	[dic setValue:chans forKey:@"channelList"];
+	[dic setValue:self.nickText.stringValue forKey:@"identityNickname"];
+	[dic setValue:[self.hostCombo.stringValue cleanedServerHostmask] forKey:@"serverAddress"];
 	
 	if ([self.delegate respondsToSelector:@selector(welcomeSheet:onOK:)]) {
 		[self.delegate welcomeSheet:self onOK:dic];
@@ -168,7 +168,7 @@
 	if (n >= 0) {
 		NSString *s = [[note object] textStorage].string.copy;
 		
-		(self.channels)[n] = s;
+		[(self.channels) replaceObjectAtIndex:n withObject:s];
 		
 		[self.channelTable reloadData];
 		[self.channelTable selectItemAtIndex:n];

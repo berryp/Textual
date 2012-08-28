@@ -45,7 +45,7 @@
 		return NO;
 	}
 	
-	id obj = self[key];
+	id obj = [self objectForKey:key];
 	
 	if ([obj respondsToSelector:@selector(boolValue)]) {
 		return [obj boolValue];
@@ -60,7 +60,7 @@
 		return 0;
 	}
 	
-	id obj = self[key];
+	id obj = [self objectForKey:key];
 	
 	if ([obj respondsToSelector:@selector(integerValue)]) {
 		return [obj integerValue];
@@ -75,7 +75,7 @@
 		return 0;
 	}
 	
-	id obj = self[key];
+	id obj = [self objectForKey:key];
 	
 	if ([obj respondsToSelector:@selector(longLongValue)]) {
 		return [obj longLongValue];
@@ -90,7 +90,7 @@
 		return 0;
 	}
 	
-	id obj = self[key];
+	id obj = [self objectForKey:key];
 	
 	if ([obj respondsToSelector:@selector(doubleValue)]) {
 		return [obj doubleValue];
@@ -105,7 +105,7 @@
 		return nil;
 	}
 	
-	id obj = self[key];
+	id obj = [self objectForKey:key];
 	
 	if ([obj isKindOfClass:[NSString class]]) {
 		return obj;
@@ -120,7 +120,7 @@
 		return nil;
 	}
 	
-	id obj = self[key];
+	id obj = [self objectForKey:key];
 	
 	if ([obj isKindOfClass:[NSDictionary class]]) {
 		return obj;
@@ -135,7 +135,7 @@
 		return nil;
 	}
 	
-	id obj = self[key];
+	id obj = [self objectForKey:key];
 	
 	if ([obj isKindOfClass:[NSArray class]]) {
 		return obj;
@@ -150,7 +150,7 @@
 		return nil;
 	}
 	
-	id obj = self[key];
+	id obj = [self objectForKey:key];
 	
 	if ([obj isKindOfClass:[NSValue class]]) {
 		return [obj pointerValue];
@@ -192,7 +192,7 @@
 	NSMutableDictionary *newDict = [NSMutableDictionary dictionary];
 	
 	for (NSString *key in sortedKeys) {
-		newDict[key] = self[key];
+		[newDict setValue:[self objectForKey:key] forKey:key];
 	}
 
 	return newDict;
@@ -205,33 +205,33 @@
 - (void)safeSetObject:(id)anObject forKey:(id<NSCopying>)aKey
 {
 	if (PointerIsNotEmpty(anObject)) {
-		self[aKey] = anObject;
+		[self setObject:anObject forKey:aKey];
 	}
 }
 
 - (void)setBool:(BOOL)value forKey:(NSString *)key
 {
-	self[key] = @(value);
+	[self setValue:@(value) forKey:key];
 }
 
 - (void)setInteger:(NSInteger)value forKey:(NSString *)key
 {
-	self[key] = @(value);
+	[self setValue:@(value) forKey:key];
 }
 
 - (void)setLongLong:(long long)value forKey:(NSString *)key
 {
-	self[key] = @(value);
+	[self setValue:@(value) forKey:key];
 }
 
 - (void)setDouble:(TXNSDouble)value forKey:(NSString *)key
 {
-	self[key] = @(value);
+	[self setValue:@(value) forKey:key];
 }
 
 - (void)setPointer:(void *)value forKey:(NSString *)key
 {
-	self[key] = [NSValue valueWithPointer:value];
+	[self setValue:[NSValue valueWithPointer:value] forKey:key];
 }
 
 @end

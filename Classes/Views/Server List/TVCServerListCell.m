@@ -232,8 +232,8 @@ static BOOL _defaultDrawingColorsPopulated;
 		textColor = _badgeTextColorTS;
 	}
 	
-	attributes[NSFontAttributeName] = _badgeFont;
-	attributes[NSForegroundColorAttributeName] = textColor;
+	[attributes setObject:_badgeFont forKey:NSFontAttributeName];
+	[attributes setObject:textColor forKey:NSForegroundColorAttributeName];
 	
 	NSAttributedString *mcstring = [[NSAttributedString alloc] initWithString:messageCountString
 																   attributes:attributes];

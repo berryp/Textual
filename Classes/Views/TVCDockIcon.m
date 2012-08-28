@@ -66,8 +66,8 @@
 	
 	NSMutableDictionary *badgeTextAttrs = [NSMutableDictionary dictionary];
 	
-	badgeTextAttrs[NSForegroundColorAttributeName] = [NSColor whiteColor];
-	badgeTextAttrs[NSFontAttributeName] = _badgeTextFont;
+	[badgeTextAttrs setObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
+	[badgeTextAttrs setObject:_badgeTextFont forKey:NSFontAttributeName];
 	
 	/* ////////////////////////////////////////////////////////// */
 	/* Load Drawing Images. */

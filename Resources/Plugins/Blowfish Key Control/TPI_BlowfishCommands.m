@@ -111,7 +111,7 @@
 	NSArray *privmsgRule_2 = @[[@"^" stringByAppendingString:TXExchangeResponsePrefix], 
 							  NSNumberWithBOOL(YES), NSNumberWithBOOL(YES), NSNumberWithBOOL(YES)];
 	
-	rules[IRCCommandFromLineType(TVCLogLineNoticeType)] = @[privmsgRule_1, privmsgRule_2];
+	[rules setObject:@[privmsgRule_1, privmsgRule_2] forKey:IRCCommandFromLineType(TVCLogLineNoticeType)];
 	
 	return rules;
 }

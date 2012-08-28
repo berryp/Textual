@@ -192,7 +192,7 @@
 		return;
 	}
     
-    if ([self isSubviewCollapsed:subviews_[self.fixedViewIndex]]) {
+    if ([self isSubviewCollapsed:[subviews_ objectAtIndex:self.fixedViewIndex]]) {
         [super adjustSubviews];
         
         return;

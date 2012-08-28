@@ -55,42 +55,42 @@
 {
 	NSNumber *modsKey = @(mods);
 	
-	NSMutableDictionary *map = (self.codeHandlerMap)[modsKey];
+	NSMutableDictionary *map = [(self.codeHandlerMap) objectForKey:modsKey];
 	
 	if (NSObjectIsEmpty(map)) {
 		map = [NSMutableDictionary dictionary];
 		
-		(self.codeHandlerMap)[modsKey] = map;
+		[(self.codeHandlerMap) setObject:map forKey:modsKey];
 	}
 	
-	map[@(code)] = NSStringFromSelector(selector);
+	[map setObject:NSStringFromSelector(selector) forKey:@(code)];
 }
 
 - (void)registerSelector:(SEL)selector character:(UniChar)c modifiers:(NSUInteger)mods
 {
 	NSNumber *modsKey = @(mods);
 	
-	NSMutableDictionary *map = (self.characterHandlerMap)[modsKey];
+	NSMutableDictionary *map = [(self.characterHandlerMap) objectForKey:modsKey];
 	
 	if (NSObjectIsEmpty(map)) {
 		map = [NSMutableDictionary dictionary];
 		
-		(self.characterHandlerMap)[modsKey] = map;
+		[(self.characterHandlerMap) setObject:map forKey:modsKey];
 	}
 	
-	map[NSNumberWithInteger(c)] = NSStringFromSelector(selector);
+	[map setObject:NSStringFromSelector(selector) forKey:NSNumberWithInteger(c)];
 }
 
 - (void)registerSelector:(SEL)selector characters:(NSRange)characterRange modifiers:(NSUInteger)mods
 {
 	NSNumber *modsKey = @(mods);
 	
-	NSMutableDictionary *map = (self.characterHandlerMap)[modsKey];
+	NSMutableDictionary *map = [(self.characterHandlerMap) objectForKey:modsKey];
 	
 	if (NSObjectIsEmpty(map)) {
 		map = [NSMutableDictionary dictionary];
 		
-		(self.characterHandlerMap)[modsKey] = map;
+		[(self.characterHandlerMap) setObject:map forKey:modsKey];
 	}
 	
 	NSInteger from = characterRange.location;
@@ -99,7 +99,7 @@
 	for (NSInteger i = from; i < to; ++i) {
 		NSNumber *charKey = @(i);
 		
-		map[charKey] = NSStringFromSelector(selector);
+		[map setObject:NSStringFromSelector(selector) forKey:charKey];
 	}
 }
 
@@ -115,10 +115,10 @@
 	
 	NSNumber *modsKey = @(m);
 	
-	NSMutableDictionary *codeMap = (self.codeHandlerMap)[modsKey];
+	NSMutableDictionary *codeMap = [(self.codeHandlerMap) objectForKey:modsKey];
 	
 	if (codeMap) {
-		NSString *selectorName = codeMap[NSNumberWithInteger([e keyCode])];
+		NSString *selectorName = [codeMap objectForKey:NSNumberWithInteger([e keyCode])];
 
 		if (selectorName) {
 			objc_msgSend(self.target, NSSelectorFromString(selectorName), e);
@@ -127,13 +127,13 @@
 		}
 	}
 	
-	NSMutableDictionary *characterMap = (self.characterHandlerMap)[modsKey];
+	NSMutableDictionary *characterMap = [(self.characterHandlerMap) objectForKey:modsKey];
 	
 	if (characterMap) {
 		NSString *str = [[e charactersIgnoringModifiers] lowercaseString];
 		
 		if (NSObjectIsNotEmpty(str)) {
-			NSString *selectorName = characterMap[NSNumberWithInteger([str characterAtIndex:0])];
+			NSString *selectorName = [characterMap objectForKey:NSNumberWithInteger([str characterAtIndex:0])];
 			
 			if (selectorName) {
 				objc_msgSend(self.target, NSSelectorFromString(selectorName), e);

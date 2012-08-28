@@ -58,15 +58,15 @@
 	while (limitRange.length > 0) {
 		NSDictionary *dict = [self safeAttributesAtIndex:limitRange.location longestEffectiveRange:&effectiveRange inRange:limitRange];
 		
-		NSInteger foregroundColor = mapColorValue(dict[NSForegroundColorAttributeName]);
-		NSInteger backgroundColor = mapColorValue(dict[NSBackgroundColorAttributeName]);
+		NSInteger foregroundColor = mapColorValue([dict objectForKey:NSForegroundColorAttributeName]);
+		NSInteger backgroundColor = mapColorValue([dict objectForKey:NSBackgroundColorAttributeName]);
         
         NSNumber *foregroundNumber = @(foregroundColor);
         NSNumber *backgroundNumber = @(backgroundColor);
 		
 		BOOL color = (foregroundColor >= 0 && foregroundColor <= 15);
         
-        NSFont *baseFont = dict[NSFontAttributeName];
+        NSFont *baseFont = [dict objectForKey:NSFontAttributeName];
 		
 		BOOL boldText       = [baseFont fontTraitSet:NSBoldFontMask];
 		BOOL italicText     = [baseFont fontTraitSet:NSItalicFontMask];
@@ -161,13 +161,13 @@
 		
 		NSDictionary *dict = [base safeAttributesAtIndex:limitRange.location longestEffectiveRange:&effectiveRange inRange:limitRange];
         
-		NSInteger foregroundColor = mapColorValue(dict[NSForegroundColorAttributeName]);
-		NSInteger backgroundColor = mapColorValue(dict[NSBackgroundColorAttributeName]);
+		NSInteger foregroundColor = mapColorValue([dict objectForKey:NSForegroundColorAttributeName]);
+		NSInteger backgroundColor = mapColorValue([dict objectForKey:NSBackgroundColorAttributeName]);
         
         NSNumber *foregroundNumber = @(foregroundColor);
         NSNumber *backgroundNumber = @(backgroundColor);
         
-        NSFont *baseFont = dict[NSFontAttributeName];
+        NSFont *baseFont = [dict objectForKey:NSFontAttributeName];
 		
 		BOOL foregroundColorD = (foregroundColor >= 0 && foregroundColor <= 15);
         BOOL backgroundColorD = (backgroundColor >= 0 && backgroundColor <= 15);
@@ -334,7 +334,7 @@
 		switch (effect) {
 			case IRCTextFormatterBoldEffect: 
 			{
-                NSFont *baseFont = dict[NSFontAttributeName];
+                NSFont *baseFont = [dict objectForKey:NSFontAttributeName];
 				
                 return [baseFont fontTraitSet:NSBoldFontMask];
 				
@@ -342,7 +342,7 @@
 			}
 			case IRCTextFormatterItalicEffect: 
 			{
-                NSFont *baseFont = dict[NSFontAttributeName];
+                NSFont *baseFont = [dict objectForKey:NSFontAttributeName];
 				
                 return [baseFont fontTraitSet:NSItalicFontMask];
 				
@@ -360,7 +360,7 @@
 			}
 			case IRCTextFormatterForegroundColorEffect:
 			{
-				NSColor *foregroundColor = dict[NSForegroundColorAttributeName];
+				NSColor *foregroundColor = [dict objectForKey:NSForegroundColorAttributeName];
 				
                 if (PointerIsNotEmpty(foregroundColor)) {
 					NSColor *defaultColor = TXDefaultTextFieldFontColor;
@@ -380,7 +380,7 @@
 			}
 			case IRCTextFormatterBackgroundColorEffect:
 			{
-				NSColor *backgroundColor = dict[NSBackgroundColorAttributeName];
+				NSColor *backgroundColor = [dict objectForKey:NSBackgroundColorAttributeName];
 				
 				if (PointerIsNotEmpty(backgroundColor)) {
 					return YES;
@@ -429,7 +429,7 @@
 	while (limitRange.length >= 1) {
 		NSDictionary *dict = [valued safeAttributesAtIndex:limitRange.location longestEffectiveRange:&effectiveRange inRange:limitRange];
 		
-		NSFont *baseFont = dict[NSFontAttributeName];
+		NSFont *baseFont = [dict objectForKey:NSFontAttributeName];
         
         NSMutableDictionary *newDict = [NSMutableDictionary dictionaryWithDictionary:dict];
         
@@ -441,7 +441,7 @@
                 }
                 
                 if (baseFont) {
-                    newDict[NSFontAttributeName] = baseFont;
+                    [newDict setObject:baseFont forKey:[dict objectForKey:NSFontAttributeName]];
                 }
                 
                 break;
@@ -453,14 +453,14 @@
                 }
                 
                 if (baseFont) {
-                    newDict[NSFontAttributeName] = baseFont;
+                    [newDict setObject:baseFont forKey:[dict objectForKey:NSFontAttributeName]];
                 }
                 
                 break;
             }
             case IRCTextFormatterUnderlineEffect:
             {
-                newDict[NSUnderlineStyleAttributeName] = @(NSSingleUnderlineStyle);
+                [newDict setObject:@(NSSingleUnderlineStyle) forKey:NSUnderlineStyleAttributeName];
                 
                 break;
             }
@@ -469,7 +469,7 @@
                 NSInteger colorCode = [value integerValue];
                 
                 if (colorCode >= 0 && colorCode <= 15) {
-                    newDict[NSForegroundColorAttributeName] = mapColorCode(colorCode);
+                    [newDict setObject:mapColorCode(colorCode) forKey:NSForegroundColorAttributeName];
                 }
                 
                 break;
@@ -479,7 +479,7 @@
                 NSInteger colorCode = [value integerValue];
                 
                 if (colorCode >= 0 && colorCode <= 15) {
-                    newDict[NSBackgroundColorAttributeName] = mapColorCode(colorCode);
+                    [newDict setObject:mapColorCode(colorCode) forKey:NSBackgroundColorAttributeName];
                 }
                 
                 break;
@@ -507,7 +507,7 @@
 	while (limitRange.length >= 1) {
 		NSDictionary *dict = [valued safeAttributesAtIndex:limitRange.location longestEffectiveRange:&effectiveRange inRange:limitRange];
 		
-		NSFont *baseFont = dict[NSFontAttributeName];
+		NSFont *baseFont = [dict objectForKey:NSFontAttributeName];
         
         NSMutableDictionary *newDict = [NSMutableDictionary dictionaryWithDictionary:dict];
 		
@@ -519,7 +519,7 @@
 						baseFont = [_NSFontManager() convertFont:baseFont toNotHaveTrait:NSBoldFontMask];
 					
 						if (baseFont) {
-							newDict[NSFontAttributeName] = baseFont;
+							[newDict setObject:baseFont forKey:[dict objectForKey:NSFontAttributeName]];
                             
                             [self setAttributes:newDict inRange:effectiveRange];
 						}
@@ -533,7 +533,7 @@
 						baseFont = [_NSFontManager() convertFont:baseFont toNotHaveTrait:NSItalicFontMask];
 						
 						if (baseFont) {
-							newDict[NSFontAttributeName] = baseFont;
+							[newDict setObject:baseFont forKey:[dict objectForKey:NSFontAttributeName]];
                             
                             [self setAttributes:newDict inRange:effectiveRange];
 						}
@@ -549,7 +549,7 @@
 				}
 				case IRCTextFormatterForegroundColorEffect:
 				{
-                    newDict[NSForegroundColorAttributeName] = defaultColor;
+                    [newDict setObject:defaultColor forKey:NSForegroundColorAttributeName];
                     
                     [self setAttributes:newDict inRange:effectiveRange];
 					

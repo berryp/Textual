@@ -131,12 +131,12 @@
 		if (NSObjectIsEmpty(chanlist)) {	
 			[result appendString:TXTFLS(@"BragspamPluginChannelResultNone", client.config.network)];
 		} else {
-			cc = chanlist[0];
+			cc = [chanlist objectAtIndex:0];
 			
 			if (chanlist.count == 1) {	
 				[result appendString:TXTFLS(@"BragspamPluginChannelResultSingle", cc.name, client.config.network)];
 			} else if (chanlist.count == 2) {
-				IRCChannel *ccsecond = chanlist[1];
+				IRCChannel *ccsecond = [chanlist objectAtIndex:1];
 				
 				[result appendString:TXTFLS(@"BragspamPluginChannelResultDouble", cc.name, ccsecond.name, client.config.network)];
 			} else {

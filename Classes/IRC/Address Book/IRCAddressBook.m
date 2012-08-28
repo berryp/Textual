@@ -44,7 +44,7 @@
 	if ((self = [super init])) {
 		self.cid = (([dic integerForKey:@"cid"]) ?: TXRandomNumber(9999));
 		
-		self.hostmask = dic[@"hostmask"];
+		self.hostmask = [dic objectForKey:@"hostmask"];
 		
 		self.ignorePublicMsg	= [dic boolForKey:@"ignorePublicMsg"];
 		self.ignorePrivateMsg	= [dic boolForKey:@"ignorePrivateMsg"];
@@ -129,7 +129,7 @@
 {
 	NSMutableDictionary *dic = [NSMutableDictionary dictionary];
 	
-	dic[@"hostmask"] = self.hostmask;
+	[dic setObject:self.hostmask forKey:@"hostmask"];
 	
 	[dic setBool:self.ignorePublicMsg		forKey:@"ignorePublicMsg"];
 	[dic setBool:self.ignorePrivateMsg		forKey:@"ignorePrivateMsg"];

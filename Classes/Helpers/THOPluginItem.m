@@ -69,7 +69,7 @@
 			if (NSObjectIsNotEmpty(pluginRules)) {
 				for (NSString *command in pluginRules) {
 					if ([TPCPreferences indexOfIRCommand:command publicSearch:NO] >= 1) {
-						id objectValue = pluginRules[command];
+						id objectValue = [pluginRules objectForKey:command];
 						
 						if ([objectValue isKindOfClass:[NSArray class]]) {
 							for (NSArray *commandRules in objectValue) {
@@ -84,15 +84,15 @@
 										NSArray *boss_entry = @[console, channels, queries];
 										
 										if ([newOutputRulesDict containsKey:command] == NO) {
-											newOutputRulesDict[command] = [[NSMutableDictionary alloc] init];
+											[newOutputRulesDict setObject:[[NSMutableDictionary alloc] init] forKey:command];
 										}
 										
-										NSDictionary *originalEntries = newOutputRulesDict[command];
+										NSDictionary *originalEntries = [newOutputRulesDict objectForKey:command];
 										
 										if ([originalEntries containsKeyIgnoringCase:regex]) {
 											LogToConsole(@"Extension Error: Found multiple entries of the same regular expression in an output rule. Using only first. (Command = \"%@\" Expression = \"%@\")", command, regex);
 										} else {
-											newOutputRulesDict[command][regex] = boss_entry;
+											[[newOutputRulesDict objectForKey:command] setObject:boss_entry forKey:regex];
 										}
 									}
 								}
@@ -113,14 +113,14 @@
 					for (__strong NSString *cmd in spdcmds) {
 						cmd = [cmd uppercaseString];
 						
-						NSArray *cmdDict = newUserDict[cmd];
+						NSArray *cmdDict = [newUserDict objectForKey:cmd];
 						
 						if (NSObjectIsEmpty(cmdDict)) {
-							newUserDict[cmd] = [[NSMutableArray alloc] init];
+							[newUserDict setObject:[[NSMutableArray alloc] init] forKey:cmd];
 						}
 						
 						if ([cmdDict containsObject:bundle] == NO) {
-							[newUserDict[cmd] safeAddObject:self];
+							[[newUserDict objectForKey:cmd] safeAddObject:self];
 						}
 					}
 				}
@@ -137,14 +137,14 @@
 					for (__strong NSString *cmd in spdcmds) {
 						cmd = [cmd uppercaseString];
 						
-						NSArray *cmdDict = newServerDict[cmd];
+						NSArray *cmdDict = [newServerDict objectForKey:cmd];
 						
 						if (NSObjectIsEmpty(cmdDict)) {
-							newServerDict[cmd] = [[NSMutableArray alloc] init];
+							[newServerDict setObject:[[NSMutableArray alloc] init] forKey:cmd];
 						}
 						
 						if ([cmdDict containsObject:bundle] == NO) {
-							[newServerDict[cmd] safeAddObject:self];
+							[[newServerDict objectForKey:cmd] safeAddObject:self];
 						}
 					}
 				}

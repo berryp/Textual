@@ -151,7 +151,7 @@
 
 - (void)setAttributesWithContext:(NSArray *)contextArray /* @private */
 {
-	NSRange local = NSRangeFromString(contextArray[1]);
+	NSRange local = NSRangeFromString([contextArray objectAtIndex:1]);
 
 	NSDictionary *attrs = [self.attributedString attributesAtIndex:0
 											 longestEffectiveRange:NULL
@@ -161,9 +161,9 @@
 									selector:@selector(setAttributesWithContext:)
 									  object:@[attrs, NSStringFromRange(local)]];
 
-	DebugLogToConsole(@"old: %@; new: %@", attrs, contextArray[0]);
+	DebugLogToConsole(@"old: %@; new: %@", attrs, [contextArray objectAtIndex:0]);
 	
-	[self setAttributes:contextArray[0] inRange:local];
+	[self setAttributes:[contextArray objectAtIndex:0] inRange:local];
 }
 
 #pragma mark -

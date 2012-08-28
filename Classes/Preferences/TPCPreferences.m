@@ -251,7 +251,7 @@ static NSArray *IRCInternalUseCommandIndexMap;
 			continue;
 		}
 
-		[index addObject:indexInfo[1]];
+		[index addObject:[indexInfo objectAtIndex:1]];
  	}
 
 	return index;
@@ -264,10 +264,10 @@ static NSArray *IRCInternalUseCommandIndexMap;
 	NSArray *searchPath = [self.class IRCCommandIndex:isPublic];
 
 	for (NSArray *indexInfo in searchPath) {
-		NSString *matchKey = indexInfo[0];
+		NSString *matchKey = [indexInfo objectAtIndex:0];
 
 		if ([matchKey isEqualNoCase:key]) {
-			return indexInfo[1];
+			return [indexInfo objectAtIndex:1];
 		}
  	}
 
@@ -317,7 +317,7 @@ NSString *IRCPublicCommandIndex(const char *key)
 	BOOL inDevMode = [_NSUserDefaults() boolForKey:TXDeveloperEnvironmentToken];
 
 	for (NSArray *indexInfo in searchPath) {
-		NSString *matValue = indexInfo[1];
+		NSString *matValue = [indexInfo objectAtIndex:1];
 
 		if (isPublic) {
 			BOOL developerOnly = [indexInfo boolAtIndex:3];
@@ -361,7 +361,7 @@ NSString *IRCPublicCommandIndex(const char *key)
 
 + (NSString *)applicationName
 {
-	return [TPCPreferences textualInfoPlist][@"CFBundleName"];
+	return [[TPCPreferences textualInfoPlist] objectForKey:@"CFBundleName"];
 }
 
 + (NSInteger)applicationProcessID
@@ -371,7 +371,7 @@ NSString *IRCPublicCommandIndex(const char *key)
 
 + (NSString *)gitBuildReference
 {
-	return [TPCPreferences textualInfoPlist][@"TXBundleBuildReference"];
+	return [[TPCPreferences textualInfoPlist] objectForKey:@"TXBundleBuildReference"];
 }
 
 + (NSString *)applicationBundleIdentifier
@@ -596,7 +596,7 @@ static NSURL *transcriptFolderResolvedBookmark;
 		return YES;
 	}
 
-	NSString *osxversion = systemVersionPlist[@"ProductVersion"];
+	NSString *osxversion = [systemVersionPlist objectForKey:@"ProductVersion"];
 
 	NSArray *matches = @[@"10.7", @"10.7.0", @"10.7.1", @"10.7.2"];
 
@@ -1161,7 +1161,7 @@ static NSMutableArray *excludeWords = nil;
 	NSArray *ary = [_NSUserDefaults() objectForKey:@"Highlight List -> Primary Matches"];
 
 	for (NSDictionary *e in ary) {
-		NSString *s = e[@"string"];
+		NSString *s = [e objectForKey:@"string"];
 
 		if (NSObjectIsNotEmpty(s)) {
 			[keywords safeAddObject:s];
@@ -1180,7 +1180,7 @@ static NSMutableArray *excludeWords = nil;
 	NSArray *ary = [_NSUserDefaults() objectForKey:@"Highlight List -> Excluded Matches"];
 
 	for (NSDictionary *e in ary) {
-		NSString *s = e[@"string"];
+		NSString *s = [e objectForKey:@"string"];
 
 		if (s) [excludeWords safeAddObject:s];
 	}
@@ -1193,7 +1193,7 @@ static NSMutableArray *excludeWords = nil;
 	NSMutableArray *ary = [NSMutableArray array];
 
 	for (NSDictionary *e in src) {
-		NSString *s = e[@"string"];
+		NSString *s = [e objectForKey:@"string"];
 
 		if (NSObjectIsNotEmpty(s)) {
 			[ary safeAddObject:s];
@@ -1207,7 +1207,7 @@ static NSMutableArray *excludeWords = nil;
 	for (NSString *s in ary) {
 		NSMutableDictionary *dic = [NSMutableDictionary dictionary];
 
-		dic[@"string"] = s;
+		[dic setValue:s forKey:@"string"];
 
 		[saveAry safeAddObject:dic];
 	}
@@ -1360,25 +1360,25 @@ static NSInteger totalRunTime = 0;
 	[d setBool:YES forKey:@"NotificationType -> Address Bok Match -> Enabled"];
 	[d setBool:YES forKey:@"NotificationType -> Private Message (New) -> Enabled"];
 
-	d[@"NotificationType -> Highlight -> Sound"] = @"Glass";
-	d[@"ScanForIRCopAlertInServerNoticesMatch"] = @"ircop alert";
+	[d setValue:@"Glass" forKey:@"NotificationType -> Highlight -> Sound"];
+    [d setValue:@"ircop alert" forKey:@"ScanForIRCopAlertInServerNoticesMatch"];
+    
+    [d setValue:@"Guest" forKey:@"DefaultIdentity -> Nickname"];
+    [d setValue:@"textual" forKey:@"DefaultIdentity -> Username"];
+    [d setValue:@"Textual User" forKey:@"DefaultIdentity -> Realname"];
 
-	d[@"DefaultIdentity -> Nickname"] = @"Guest";
-	d[@"DefaultIdentity -> Username"] = @"textual";
-	d[@"DefaultIdentity -> Realname"] = @"Textual User";
+	[d setValue:TXTLS(@"ShunReason") forKey:@"IRCopDefaultLocalizaiton -> Shun Reason"];
+	[d setValue:TXTLS(@"KillReason") forKey:@"IRCopDefaultLocalizaiton -> Kill Reason"];
+	[d setValue:TXTLS(@"GlineReason") forKey:@"IRCopDefaultLocalizaiton -> G:Line Reason"];
 
-	d[@"IRCopDefaultLocalizaiton -> Shun Reason"] = TXTLS(@"ShunReason");
-	d[@"IRCopDefaultLocalizaiton -> Kill Reason"] = TXTLS(@"KillReason");
-	d[@"IRCopDefaultLocalizaiton -> G:Line Reason"] = TXTLS(@"GlineReason");
+	[d setValue:TXDefaultTextualLogStyle forKey:@"Theme -> Name"];
+	[d setValue:TXDefaultTextualLogFont forKey:@"Theme -> Font Name"];
+	[d setValue:TXLogLineUndefinedNicknameFormat forKey:@"Theme -> Nickname Format"];
+	[d setValue:TXDefaultTextualTimestampFormat forKey:@"Theme -> Timestamp Format"];
 
-	d[@"Theme -> Name"] = TXDefaultTextualLogStyle;
-	d[@"Theme -> Font Name"] = TXDefaultTextualLogFont;
-	d[@"Theme -> Nickname Format"] = TXLogLineUndefinedNicknameFormat;
-	d[@"Theme -> Timestamp Format"] = TXDefaultTextualTimestampFormat;
+	[d setValue:@"~/Documents/Textual Logs" forKey:@"LogTranscriptDestination"];
 
-	d[@"LogTranscriptDestination"] = @"~/Documents/Textual Logs";
-
-	d[@"ChannelOperatorDefaultLocalization -> Kick Reason"] = TXTLS(@"KickReason");
+	[d setValue:TXTLS(@"KickReason") forKey:@"ChannelOperatorDefaultLocalization -> Kick Reason"];
 
 	[d setInteger:2										forKey:@"AutojoinMaximumChannelJoinCount"];
 	[d setInteger:300									forKey:@"ScrollbackMaximumLineCount"];

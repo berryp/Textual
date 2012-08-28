@@ -133,7 +133,7 @@ NSInteger mapColorValue(NSColor *color)
 		CGFloat _alphac = [color alphaComponent];
 		
 		for (NSInteger i = 0; i <= 15; i++) {
-			NSArray *allColors = possibleColors[i];
+			NSArray *allColors = [possibleColors objectAtIndex:i];
 			
 			for (NSColor *mapped in allColors) {
 				if ([mapped numberOfComponents] == 4) {
@@ -265,14 +265,14 @@ static NSString *renderRange(NSString *body, attr_t attr, NSInteger start, NSInt
 			link = [NSString stringWithFormat:@"http://%@", link];
 		}	
 
-		templateTokens[@"anchorLocation"]	= link;
-		templateTokens[@"anchorTitle"]		= logEscape(content);
+		[templateTokens setObject:link forKey:@"anchorLocation"];
+		[templateTokens setObject:logEscape(content) forKey:@"anchorTitle"];
 
 		return TXRenderStyleTemplate(@"renderedStandardAnchorLinkResource", templateTokens, log);
 	}
 	else if (attr & _rendererChannelNameAttribute)
 	{
-		templateTokens[@"channelName"] = logEscape(content);
+		[templateTokens setObject:logEscape(content) forKey:@"channelName"];
 		
 		return TXRenderStyleTemplate(@"renderedChannelNameLinkResource", templateTokens, log);
 	}
@@ -280,7 +280,7 @@ static NSString *renderRange(NSString *body, attr_t attr, NSInteger start, NSInt
 	{
 		content = logEscape(content);
 
-		templateTokens[@"messageFragment"] = content;
+		[templateTokens setObject:content forKey:@"messageFragment"];
 
 		// --- //
 		
@@ -290,8 +290,8 @@ static NSString *renderRange(NSString *body, attr_t attr, NSInteger start, NSInt
 			
 			if (PointerIsEmpty(user) == NO) {
                 if ([user.nick isEqualNoCase:client.myNick] == NO) {
-					templateTokens[@"inlineNicknameMatchFound"]  = @(YES);
-					templateTokens[@"inlineNicknameColorNumber"] = @(user.colorNumber);
+					[templateTokens setObject:@(YES) forKey:@"inlineNicknameMatchFound"];
+					[templateTokens setObject:@(user.colorNumber) forKey:@"inlineNicknameColorNumber"];
                 } 
             }
 		}
@@ -299,26 +299,26 @@ static NSString *renderRange(NSString *body, attr_t attr, NSInteger start, NSInt
 		// --- //
 		
 		if (attr & _effectMask) {
-			templateTokens[@"fragmentContainsFormattingSymbols"] = @(YES);
+			[templateTokens setObject:@(YES) forKey:@"fragmentContainsFormattingSymbols"];
 			
 			if (attr & _rendererBoldFormatAttribute) {
-				templateTokens[@"fragmentIsBold"] = @(YES);
+				[templateTokens setObject:@(YES) forKey:@"fragmentIsBold"];
 			}
 			
 			if (attr & _rendererItalicFormatAttribute) {
-				templateTokens[@"fragmentIsItalicized"] = @(YES);
+				[templateTokens setObject:@(YES) forKey:@"fragmentIsItalicized"];
 			}
 			
 			if (attr & _rendererUnderlineFormatAttribute) {
-				templateTokens[@"fragmentIsUnderlined"] = @(YES);
+				[templateTokens setObject:@(YES) forKey:@"fragmentIsUnderlined"];
 			}
 			
 			if (attr & _rendererTextColorAttribute) {
-				templateTokens[@"fragmentTextColor"] = @(attr & _textColorMask);
+				[templateTokens setObject:@(attr & _textColorMask) forKey:@"fragmentTextColor"];
 			}
 			
 			if (attr & _rendererBackgroundColorAttribute) {
-				templateTokens[@"fragmentBackgroundColor"] = @((attr & _backgroundColorMask) >> 4);
+				[templateTokens setObject:@((attr & _backgroundColorMask) >> 4) forKey:@"fragmentBackgroundColor"];
 			}
 		}
 
@@ -347,7 +347,7 @@ static NSString *renderRange(NSString *body, attr_t attr, NSInteger start, NSInt
 	NSArray *keywords	  = [inputDictionary arrayForKey:@"keywords"];
 	NSArray *excludeWords = [inputDictionary arrayForKey:@"excludeWords"];
     
-    NSFont *attributedStringFont = inputDictionary[@"attributedStringFont"];
+    NSFont *attributedStringFont = [inputDictionary objectForKey:@"attributedStringFont"];
 	
 	NSInteger len	= [body length];
 	NSInteger start = 0;
@@ -509,7 +509,7 @@ static NSString *renderRange(NSString *body, attr_t attr, NSInteger start, NSInt
 				}
 			}
 			
-			resultInfo[@"URLRanges"] = urlAry;
+			[resultInfo setObject:urlAry forKey:@"URLRanges"];
 		}
 		
 		/* Word Matching — Highlights */

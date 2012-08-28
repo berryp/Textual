@@ -211,9 +211,8 @@ static NSArray					*encKeys						= nil;
 		
 		if ([enclosureSet characterIsMember:[m_scanString characterAtIndex:scannedRange.location]]) {
 			unsigned long encIdx = [enclosureStartArray indexOfObject:[m_scanString substringWithRange:NSMakeRange(scannedRange.location, 1)]];
-			
 			if (encIdx != NSNotFound) {
-				NSRange encRange = [m_scanString rangeOfString:enclosureStopArray[encIdx] options:NSBackwardsSearch range:scannedRange];
+				NSRange encRange = [m_scanString rangeOfString:[enclosureStopArray objectAtIndex:encIdx] options:NSBackwardsSearch range:scannedRange];
 				
 				scannedRange.location++; 
 				
@@ -345,8 +344,8 @@ static NSArray					*encKeys						= nil;
 			NSEnumerator *encEnumerator = [enclosureStack objectEnumerator];
 			
 			while ((encDict = [encEnumerator nextObject])) {
-				unsigned long encTagIndex	 = [encDict[ENC_INDEX_KEY] unsignedLongValue];
-				unsigned long encStartIndex  = [enclosureStartArray indexOfObjectIdenticalTo:encDict[ENC_CHAR_KEY]];
+				unsigned long encTagIndex	 = [[encDict objectForKey:ENC_INDEX_KEY] unsignedLongValue];
+				unsigned long encStartIndex  = [enclosureStartArray indexOfObjectIdenticalTo:[encDict objectForKey:ENC_CHAR_KEY]];
 				
 				if ([enclosureStopArray indexOfObjectIdenticalTo:matchChar] == encStartIndex) {
 					NSRange encRange = NSMakeRange(encTagIndex, (encScanLocation - encTagIndex + 1));

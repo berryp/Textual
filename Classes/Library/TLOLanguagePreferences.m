@@ -61,7 +61,7 @@ static NSDictionary *themeLocalizations = nil;
 	if (PointerIsEmpty(themeLocalizations)) {
 		return NSLocalizedStringFromTable(key, @"BasicLanguage", nil);
 	} else {
-		NSString *localstring = themeLocalizations[key];
+		NSString *localstring = [themeLocalizations objectForKey:key];
 		
 		if (localstring) {
 			return [localstring reservedCharactersToIRCFormatting];

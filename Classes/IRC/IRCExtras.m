@@ -247,19 +247,19 @@
     
 	NSMutableDictionary *dic = [NSMutableDictionary dictionary];
 	
-	dic[@"serverAddress"] = server;
-	dic[@"connectionName"] = server;
+	[dic setObject:server forKey:@"serverAddress"];
+	[dic setObject:server forKey:@"connectionName"];
 	
 	[dic setInteger:port forKey:@"serverPort"];
 	
 	[dic setBool:useSSL forKey:@"connectUsingSSL"];
 	[dic setBool:NO		forKey:@"connectOnLaunch"];
 	
-	dic[@"identityNckname"] = [TPCPreferences defaultNickname];
-	dic[@"identityUsername"] = [TPCPreferences defaultUsername];
-	dic[@"identityRealname"] = [TPCPreferences defaultRealname];
+	[dic setObject:[TPCPreferences defaultNickname] forKey:@"identityNckname"];
+	[dic setObject:[TPCPreferences defaultUsername] forKey:@"identityUsername"];
+	[dic setObject:[TPCPreferences defaultRealname] forKey:@"identityRealname"];
 	
-	dic[@"characterEncodingDefault"] = NSNumberWithLong(NSUTF8StringEncoding);
+	[dic setObject:NSNumberWithLong(NSUTF8StringEncoding) forKey:@"characterEncodingDefault"];
 	
 	if (NSObjectIsNotEmpty(c)) {
 		NSMutableArray *channels = [NSMutableArray array];
@@ -286,7 +286,7 @@ TPCPreferencesMigrationAssistantVersionKey : TPCPreferencesMigrationAssistantUpg
             }
         }
 		
-		dic[@"channelList"] = channels;
+		[dic setObject:channels forKey:@"channelList"];
 	}
 	
 	/* Migration Assistant Dictionary Addition. */

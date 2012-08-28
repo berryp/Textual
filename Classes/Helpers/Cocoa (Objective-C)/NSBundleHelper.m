@@ -44,7 +44,7 @@
 						   command:(NSString *)command
 							client:(IRCClient *)client
 {
-	NSArray *cmdPlugins = [world bundlesForUserInput][command];
+	NSArray *cmdPlugins = [[world bundlesForUserInput] objectForKey:command];
 	
 	if (NSObjectIsNotEmpty(cmdPlugins)) {
 		for (THOTextualPluginItem *plugin in cmdPlugins) {
@@ -59,7 +59,7 @@
 							  client:(IRCClient *)client
 							 message:(IRCMessage *)msg
 {
-	NSArray *cmdPlugins = [world bundlesForServerInput][[msg command]];
+	NSArray *cmdPlugins = [[world bundlesForServerInput] objectForKey:[msg command]];
 	
 	if (NSObjectIsNotEmpty(cmdPlugins)) {
 		NSDictionary *senderData = @{@"senderHostmask": NSStringNilValueSubstitute(msg.sender.raw),

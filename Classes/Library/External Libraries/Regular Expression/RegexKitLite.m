@@ -1189,7 +1189,7 @@ static void rkl_handleDelayedAssert(id self, SEL _cmd, id exception) {
 	if(RKL_EXPECTED(exception != NULL, 1L)) {
 		if([exception isKindOfClass:[NSException class]]) { [[NSException exceptionWithName:[exception name] reason:rkl_stringFromClassAndMethod(self, _cmd, [exception reason]) userInfo:[exception userInfo]] raise]; }
 		else {
-			id functionString = exception[@"function"], fileString = exception[@"file"], descriptionString = exception[@"description"], lineNumber = exception[@"line"];
+			id functionString = [exception objectForKey:@"function"], fileString = [exception objectForKey:@"file"], descriptionString = [exception objectForKey:@"description"], lineNumber = [exception objectForKey:@"line"];
 			RKLCHardAbortAssert((functionString != NULL) && (fileString != NULL) && (descriptionString != NULL) && (lineNumber != NULL));
 			[[NSAssertionHandler currentHandler] handleFailureInFunction:functionString file:fileString lineNumber:(NSInteger)[lineNumber longValue] description:descriptionString];
 		}

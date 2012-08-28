@@ -42,7 +42,7 @@
 - (id)safeObjectAtIndex:(NSInteger)n
 {
 	if (n >= 0 && n < self.count) {
-		return self[n];
+		return [self objectAtIndex:n];
 	}
 	
 	return nil;

@@ -513,8 +513,8 @@ constrainMaxCoordinate:(CGFloat)proposedMax
 		 ofSubviewAt:(NSInteger)dividerIndex
 {
 	if ([splitView isEqual:self.memberSplitView]) {
-		NSView *leftSide  = [splitView subviews][0];
-		NSView *rightSide = [splitView subviews][1];
+		NSView *leftSide  = [[splitView subviews] objectAtIndex:0];
+		NSView *rightSide = [[splitView subviews] objectAtIndex:1];
 		
 		NSInteger leftWidth  = [leftSide bounds].size.width;
 		NSInteger rightWidth = [rightSide bounds].size.width;
@@ -530,8 +530,8 @@ constrainMinCoordinate:(CGFloat)proposedMax
 		 ofSubviewAt:(NSInteger)dividerIndex
 {
 	if ([splitView isEqual:self.memberSplitView]) {
-		NSView *leftSide  = [splitView subviews][0];
-		NSView *rightSide = [splitView subviews][1];
+		NSView *leftSide  = [[splitView subviews] objectAtIndex:0];
+		NSView *rightSide = [[splitView subviews] objectAtIndex:1];
 		
 		NSInteger leftWidth  = [leftSide bounds].size.width;
 		NSInteger rightWidth = [rightSide bounds].size.width;
@@ -545,13 +545,13 @@ constrainMinCoordinate:(CGFloat)proposedMax
 - (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview
 {
 	if ([splitView isEqual:self.memberSplitView]) {
-		NSView *leftSide = [splitView subviews][0];
+		NSView *leftSide = [[splitView subviews] objectAtIndex:0];
         
 		if ([leftSide isEqual:subview]) {
 			return NO;
 		}
 	} else if ([splitView isEqual:self.serverSplitView]) {
-		NSView *rightSide = [splitView subviews][1];
+		NSView *rightSide = [[splitView subviews] objectAtIndex:1];
 		
 		if ([rightSide isEqual:subview] || NSObjectIsEmpty(self.world.clients)) {
 			return NO;		
@@ -879,8 +879,8 @@ constrainMinCoordinate:(CGFloat)proposedMax
 		];
 #else
 		NSArray *scriptPaths = @[
-		NSStringNilValueSubstitute([TPCPreferences whereScriptsLocalPath]),
-		NSStringNilValueSubstitute([TPCPreferences whereScriptsPath])
+		NSStringNilValueSubstitute([TPCPreferences customScriptFolderPath]),
+		NSStringNilValueSubstitute([TPCPreferences bundledScriptFolderPath])
 		];
 #endif
 		
@@ -1457,7 +1457,7 @@ typedef enum TXMoveKind : NSInteger {
 	
 	NSMutableDictionary *dic = [NSMutableDictionary dictionary];
 	
-	for (NSString *s in config[@"channelList"]) {
+	for (NSString *s in [config objectForKey:@"channelList"]) {
 		if ([s isChannelName]) {
 			[channels safeAddObject:@{@"channelName": s,
 			 @"joinOnConnect": NSNumberWithBOOL(YES), 
@@ -1466,15 +1466,15 @@ TPCPreferencesMigrationAssistantVersionKey : TPCPreferencesMigrationAssistantUpg
 		}
 	}
 	
-	NSString *host = config[@"serverAddress"];
-	NSString *nick = config[@"identityNickname"];
-	
-	dic[@"serverAddress"] = host;
-	dic[@"connectionName"] = host;
-	dic[@"identityNickname"] = nick;
-	dic[@"channelList"] = channels;
-	dic[@"connectOnLaunch"] = config[@"connectOnLaunch"];
-	dic[@"characterEncodingDefault"] = NSNumberWithLong(NSUTF8StringEncoding);
+	NSString *host = [config objectForKey:@"serverAddress"];
+	NSString *nick = [config objectForKey:@"identityNickname"];
+
+	[dic setValue:host forKey:@"serverAddress"];
+	[dic setValue:host forKey:@"connectionName"];
+	[dic setValue:nick forKey:@"identityNickname"];
+	[dic setValue:channels forKey:@"channelList"];
+	[dic setValue:[config objectForKey:@"connectOnLaunch"] forKey:@"connectOnLaunch"];
+	[dic setValue:NSNumberWithLong(NSUTF8StringEncoding) forKey:@"characterEncodingDefault"];
 	
 	/* Migration Assistant Dictionary Addition. */
 	[dic safeSetObject:TPCPreferencesMigrationAssistantUpgradePath

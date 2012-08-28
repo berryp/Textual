@@ -86,7 +86,7 @@
 		NSString *_exact_model = _model;
 		
 		if ([_all_models containsKey:_model]) {
-			_exact_model = _all_models[_model];
+			_exact_model = [_all_models objectForKey:_model];
 		}
 		
 		_new = TXTFLS(@"SystemInformationCompiledOutputModel", _exact_model);
@@ -180,9 +180,9 @@
 		NSString *osname = [self operatingSystemName];
 		
 		_new = TXTFLS(@"SystemInformationCompiledOutputOSVersion",
-					  [TPCPreferences systemInfoPlist][@"ProductName"], 
-					  [TPCPreferences systemInfoPlist][@"ProductVersion"], osname,
-					  [TPCPreferences systemInfoPlist][@"ProductBuildVersion"]);
+					  [[TPCPreferences systemInfoPlist] objectForKey:@"ProductName"],
+					  [[TPCPreferences systemInfoPlist] objectForKey:@"ProductVersion"], osname,
+					  [[TPCPreferences systemInfoPlist] objectForKey:@"ProductBuildVersion"]);
 		
 		sysinfo = [sysinfo stringByAppendingString:_new];
 	}
@@ -686,7 +686,7 @@
 
 + (NSString *)operatingSystemName
 {
-	NSString *productVersion = [TPCPreferences systemInfoPlist][@"ProductVersion"];
+	NSString *productVersion = [[TPCPreferences systemInfoPlist] objectForKey:@"ProductVersion"];
 	
 	if ([productVersion contains:@"10.6"]) {
 		return TXTLS(@"SystemInformationOSVersionSnowLeopard");
